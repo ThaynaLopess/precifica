@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#D94F86">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Eu sou Confeitaria</title>
+<link rel="manifest" id="manifest" href="manifest.webmanifest">
+<link rel="icon" id="fav" href="icons/icon-192.png">
+<link rel="apple-touch-icon" id="touch" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="logo" aria-hidden="true"></div>
+    <div><h1 id="brand">Eu sou Confeitaria</h1><p>Quanto cobrar e quanto sobra</p></div>
+    <button type="button" class="paint" aria-label="Mudar a cor do app"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.4 0 2-.9 2-1.8 0-1.3-1-1.4-1-2.7 0-1 .8-1.5 1.8-1.5H17a4 4 0 004-4c0-4.4-4-8-9-8z"/><path d="M7.5 11h.01M10 7.5h.01M14 7.5h.01"/></svg></button>
+  </header>
+
+  <main>
+    <!-- CALCULAR -->
+    <div class="view" id="v-calc">
+      <div class="calc">
+        <div class="side">
+          <section class="hero" id="hero" aria-live="polite">
+            <span class="sm" id="h-title">Preço de venda</span>
+            <div class="price" id="out-price">R$ 0,00</div>
+            <div class="pills" id="out-pills"></div>
+            <p class="msg" id="out-msg"></p>
+            <dl class="duo">
+              <div><dt>Lucro por unidade</dt><dd id="out-profit">R$ 0,00</dd></div>
+              <div><dt>Custo por unidade</dt><dd id="out-cost">R$ 0,00</dd></div>
+            </dl>
+            <button type="button" class="btn light" id="save">Salvar produto</button>
+          </section>
+          <section class="card brk" aria-labelledby="t-onde">
+            <h2 id="t-onde">Para onde vai o dinheiro</h2>
+            <div class="bar" id="out-bar" role="img" aria-label="Divisão do preço de venda"></div>
+            <ul class="rows" id="out-rows"></ul>
+          </section>
+        </div>
+
+        <div class="main">
+          <section class="card">
+            <p class="note" id="exemplo">Os números abaixo são um exemplo de bolo. Troque pelos seus.</p>
+            <label class="field"><span>Nome do produto</span>
+              <span class="input"><input id="f-nome" autocomplete="off" placeholder="Ex.: Bolo de cenoura"></span></label>
+            <label class="field"><span>Quantas unidades essa receita rende?</span>
+              <span class="input"><input id="f-rende" inputmode="numeric" autocomplete="off" placeholder="1"></span>
+              <small>Um bolo inteiro = 1. Uma fornada com 20 brigadeiros = 20.</small></label>
+            <div class="seg" role="group" aria-label="O que você quer fazer">
+              <button type="button" id="mode-price" aria-pressed="true">Calcular o preço</button>
+              <button type="button" id="mode-check" aria-pressed="false">Já tenho um preço</button>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>Ingredientes</h2>
+            <p class="note">Coloque quanto você usa na receita e quanto paga pelo quilo, litro ou unidade. O app faz a conta.</p>
+            <ul class="list-in" id="ings"></ul>
+            <button type="button" class="btn ghost" id="add-ing">+ Adicionar ingrediente</button>
+            <div class="total"><span>Ingredientes da receita toda</span><b id="ing-total">R$ 0,00</b></div>
+            <datalist id="pantry"></datalist>
+          </section>
+
+          <section class="card">
+            <h2>Outros custos <span class="opt">opcional</span></h2>
+            <p class="note">Só adicione o que fizer sentido para você. Se não usa nada disso, pode deixar vazio.</p>
+            <ul class="list-in" id="extras"></ul>
+            <div class="chips" id="chips"></div>
+          </section>
+
+          <section class="card">
+            <fieldset id="box-price">
+              <legend>Lucro</legend>
+              <label class="field"><span>Quanto você quer lucrar</span><span class="input end"><input id="f-margem" inputmode="decimal" autocomplete="off" placeholder="0"><b>%</b></span><small>Parte do preço de venda que fica com você.</small></label>
+              <label class="check"><input type="checkbox" id="f-arredondar"> Arredondar para terminar em ,90</label>
+            </fieldset>
+            <fieldset id="box-check" hidden>
+              <legend>Preço</legend>
+              <label class="field"><span>Preço de venda atual</span><span class="input"><b>R$</b><input id="f-preco" inputmode="decimal" autocomplete="off" placeholder="0,00"></span></label>
+            </fieldset>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    
+<!-- PRODUTOS -->
+    <div class="view" id="v-list" hidden>
+      <section class="card">
+        <h2>Meus produtos <span class="count" id="n">0</span></h2>
+        <input class="search" id="q" type="search" placeholder="Buscar produto" autocomplete="off" aria-label="Buscar produto">
+        <div class="bulk">
+          <button type="button" class="btn ghost sm-btn" id="all">Selecionar tudo</button>
+          <button type="button" class="btn danger sm-btn" id="del" hidden>Excluir</button>
+        </div>
+        <ul class="items" id="list"></ul>
+        <p class="empty" id="empty"></p>
+      </section>
+      <section class="card">
+        <h2>Backup e planilha</h2>
+        <p class="note">Seus produtos ficam salvos só neste aparelho. Faça um backup de vez em quando para não perder nada se trocar de celular.</p>
+        <div class="btns">
+          <button type="button" class="btn ghost" id="csv">Baixar planilha</button>
+          <button type="button" class="btn ghost" id="exp">Exportar backup</button>
+          <label class="btn ghost" for="imp">Importar backup</label>
+          <input type="file" id="imp" accept="application/json,.json" hidden>
+        </div>
+      </section>
+    </div>
+
+    <!-- LOJA -->
+    <div class="view" id="v-loja" hidden>
+      <section class="card">
+        <h2 id="loja-h">Sua loja</h2>
+        <div class="id-row brand-only">
+          <div class="logo big" aria-hidden="true"></div>
+          <div class="btns">
+            <label class="btn ghost sm-btn" for="c-logo">Escolher logo</label>
+            <input type="file" id="c-logo" accept="image/*" hidden>
+            <button type="button" class="btn ghost sm-btn" id="c-logo-rm">Remover</button>
+          </div>
+        </div>
+        <label class="field brand-only"><span>Nome da loja</span><span class="input"><input id="c-nome" autocomplete="off" placeholder="Ex.: Doces da Ana" maxlength="40"></span></label>
+        <div class="field brand-only"><span>Cor do app</span>
+          <div class="swatches" id="swatches">
+            <button type="button" data-cor="#2D3CF5" style="background:#2D3CF5" aria-label="Azul"></button>
+            <button type="button" data-cor="#E5322D" style="background:#E5322D" aria-label="Vermelho"></button>
+            <button type="button" data-cor="#F26A1B" style="background:#F26A1B" aria-label="Laranja"></button>
+            <button type="button" data-cor="#0E9F6E" style="background:#0E9F6E" aria-label="Verde"></button>
+            <button type="button" data-cor="#8A3FFC" style="background:#8A3FFC" aria-label="Roxo"></button>
+            <button type="button" data-cor="#E0368B" style="background:#E0368B" aria-label="Rosa"></button>
+            <input type="color" id="c-cor" aria-label="Outra cor">
+          </div>
+        </div>
+        <div class="field"><span>Tema</span>
+          <div class="seg three" id="tema" role="group" aria-label="Tema">
+            <button type="button" data-t="auto">Automático</button>
+            <button type="button" data-t="light">Claro</button>
+            <button type="button" data-t="dark">Escuro</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="inst-card">
+        <h2>Instalar no celular</h2>
+        <p class="note" id="inst-note">Escolha a logo antes de instalar: ela vira o ícone do app. Se trocar a logo depois, remova o app e instale de novo.</p>
+        <button type="button" class="btn" id="install" hidden>Instalar app</button>
+        <p class="note">No Android, use o menu do navegador e toque em Instalar app. No iPhone, toque em Compartilhar e depois em Adicionar à Tela de Início.</p>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="chip" id="chip" hidden><span>Preço</span><b id="chip-v">R$ 0,00</b></div>
+<nav class="nav" aria-label="Seções">
+  <button type="button" data-v="calc" aria-current="page"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01"/></svg>Calcular</button>
+  <button type="button" data-v="list"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Produtos</button>
+  <button type="button" data-v="loja"><svg viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9a3 3 0 006 0 3 3 0 006 0 3 3 0 004 0M9.5 20v-5h5v5"/></svg>Loja</button>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+<script src="config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
